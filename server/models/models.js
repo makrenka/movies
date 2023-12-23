@@ -53,9 +53,11 @@ const Movie = sequelize.define("movie", {
   title: {
     type: DataTypes.STRING,
     unique: true,
+    allowNull: false,
   },
   director: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   img: {
     type: DataTypes.STRING,
@@ -66,6 +68,11 @@ const Movie = sequelize.define("movie", {
   rating: {
     type: DataTypes.STRING,
     defaultValue: 0,
+  },
+  genreId: {
+    type: DataTypes.INTEGER,
+    unique: true,
+    allowNull: false,
   },
 });
 
@@ -92,6 +99,14 @@ const Rating = sequelize.define("rating", {
   },
 });
 
+const MovieGenre = sequelize.define("movie_genre", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+});
+
 User.hasOne(List);
 List.belongsTo(User);
 
@@ -104,8 +119,8 @@ ListMovie.belongsTo(List);
 Movie.hasOne(ListMovie);
 ListMovie.belongsTo(Movie);
 
-Genres.hasMany(Movie);
-Movie.belongsTo(Genres);
+Movie.belongsToMany(Genres, { through: MovieGenre });
+Genres.belongsToMany(Movie, { through: MovieGenre });
 
 Movie.hasMany(Rating);
 Rating.belongsTo(Movie);
@@ -117,4 +132,5 @@ module.exports = {
   Movie,
   Genres,
   Rating,
+  MovieGenre,
 };

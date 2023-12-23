@@ -7,7 +7,7 @@ class MovieController {
   async create(req, res, next) {
     try {
       const { title, director, year, genreId } = req.body;
-      const { img } = req.file;
+      const { img } = req.files;
       let fileName = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
 
