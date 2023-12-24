@@ -25,9 +25,29 @@ class MovieController {
     }
   }
 
-  async getAll(req, res) {}
+  async getAll(req, res) {
+    let { genreId, limit, page } = req.query;
+    page = page || 1;
+    limit = +limit || 9;
+    let offset = page * limit - limit;
+    let movies;
+    if (!genreId) {
+      movies = await Movie.findAndCountAll({ limit, offset });
+    } else {
+      movies = await Movie.findAndCountAll({
+        where: { genreId },
+        limit,
+        offset,
+      });
+    }
+    return res.json(movies);
+  }
 
-  async getOne(req, res) {}
+  async getOne(req, res) {
+    const { id } = req.params;
+    const movie = await Movie.findOne({ where: { id } });
+    return res.json(movie);
+  }
 }
 
 module.exports = new MovieController();
