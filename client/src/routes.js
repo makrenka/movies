@@ -31,7 +31,7 @@ export const publicRoutes = [
     Component: Movies,
   },
   {
-    path: MOVIE_PAGE_ROUTE,
+    path: MOVIE_PAGE_ROUTE + "/:id",
     Component: Movie,
   },
 ];

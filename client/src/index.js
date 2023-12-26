@@ -1,13 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { createContext } from "react";
+import ReactDOM from "react-dom/client";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import UserStore from "./store/UserStore";
+import MovieStore from "./store/MovieStore";
+
+// import "./index.css";
+
+export const Context = createContext(null);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Context.Provider
+      value={{
+        user: new UserStore(),
+        movie: new MovieStore(),
+      }}
+    >
+      <App />
+    </Context.Provider>
   </React.StrictMode>
 );
 
