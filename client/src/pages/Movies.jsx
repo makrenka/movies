@@ -8,7 +8,7 @@ export const Movies = () => {
         <Col md={3}>
           <GenresBar />
         </Col>
-        <Col md={9}></Col>
+        <Col md={9}>Movies</Col>
       </Row>
     </Container>
   );
