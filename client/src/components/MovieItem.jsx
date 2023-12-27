@@ -4,8 +4,9 @@ import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 
+import { MOVIE_PAGE_ROUTE } from "../utils/route-consts";
+
 import star from "../assets/ant-design_star-outlined.png";
-import { MOVIES_ROUTE, MOVIE_PAGE_ROUTE } from "../utils/route-consts";
 
 export const MovieItem = ({ movie }) => {
   const navigate = useNavigate();
