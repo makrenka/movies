@@ -4,7 +4,7 @@ import { AppRouter } from "./components/AppRouter";
 import { NavBar } from "./components/NavBar";
 
 // import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

@@ -21,14 +21,17 @@ export const NavBar = observer(() => {
         </NavLink>
         {user.isAuth ? (
           <Nav className="ml-auto" style={{ color: "white" }}>
-            <Button variant="outline-lite">Админ панель</Button>
-            <Button variant="outline-lite" className="ml-2">
+            <Button variant="outline-light">Админ панель</Button>
+            <Button variant="outline-light" className="ml-2">
               Выйти
             </Button>
           </Nav>
         ) : (
           <Nav className="ml-auto" style={{ color: "white" }}>
-            <Button variant="outline-lite" onClick={() => user.setIsAuth(true)}>
+            <Button
+              variant="outline-light"
+              onClick={() => user.setIsAuth(true)}
+            >
               Авторизация
             </Button>
           </Nav>

@@ -5,7 +5,11 @@ export default class MovieStore {
     this._genres = [
       { id: 1, name: "action" },
       { id: 2, name: "drama" },
+      { id: 3, name: "fantastic" },
+      { id: 4, name: "historical" },
+      { id: 5, name: "horror" },
     ];
+
     this._movies = [
       {
         id: 1,
@@ -53,6 +57,9 @@ export default class MovieStore {
         genreId: 2,
       },
     ];
+
+    this._selectedGenre = {};
+
     makeAutoObservable(this);
   }
 
@@ -64,11 +71,19 @@ export default class MovieStore {
     this._movies = movies;
   }
 
+  setSelectedGenre(genre) {
+    this._selectedGenre = genre;
+  }
+
   get genres() {
     return this._genres;
   }
 
   get movies() {
     return this._movies;
+  }
+
+  get selectedGenre() {
+    return this._selectedGenre;
   }
 }
