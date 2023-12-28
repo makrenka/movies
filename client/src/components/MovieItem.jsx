@@ -19,10 +19,12 @@ export const MovieItem = ({ movie }) => {
     >
       <Card style={{ width: 150, cursor: "pointer" }} border="light">
         <Image width={150} height={150} src={movie.img} />
-        <div className="d-flex justify-content-between align-items-center mt-2">
-          <div>Gladiator...</div>
+        <div className="d-flex flex-column justify-content-between align-items-start mt-2">
+          <h6 className="mb-0">{movie.title}</h6>
+          <p className="mb-0">genre</p>
+          <p className="mb-0">{movie.year} year</p>
           <div className="d-flex align-items-center">
-            <div>{movie.rating}</div>
+            <p className="mb-0 me-2">{movie.rating}</p>
             <Image width={20} height={20} src={star} />
           </div>
         </div>
