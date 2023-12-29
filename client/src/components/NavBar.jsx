@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -7,11 +7,12 @@ import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 
 import { Context } from "..";
-import { MOVIES_ROUTE } from "../utils/route-consts";
+import { ADMIN_ROUTE, LOGIN_ROUTE, MOVIES_ROUTE } from "../utils/route-consts";
 import { observer } from "mobx-react-lite";
 
 export const NavBar = observer(() => {
   const { user } = useContext(Context);
+  const navigate = useNavigate();
 
   return (
     <Navbar bg="dark" data-bs-theme="dark">
@@ -21,8 +22,17 @@ export const NavBar = observer(() => {
         </NavLink>
         {user.isAuth ? (
           <Nav style={{ color: "white" }}>
-            <Button variant="outline-light">Admin</Button>
-            <Button variant="outline-light" className="ms-2">
+            <Button
+              variant="outline-light"
+              onClick={() => navigate(ADMIN_ROUTE)}
+            >
+              Admin
+            </Button>
+            <Button
+              variant="outline-light"
+              className="ms-2"
+              onClick={() => navigate(LOGIN_ROUTE)}
+            >
               Sign out
             </Button>
           </Nav>
