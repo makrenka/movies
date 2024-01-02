@@ -1,8 +1,21 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { useContext, useEffect } from "react";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import { observer } from "mobx-react-lite";
+
+import { Context } from "..";
 import { GenresBar } from "../components/GenresBar";
 import { MoviesList } from "../components/MoviesList";
+import { fetchGenres } from "../http/movieAPI";
 
-export const Movies = () => {
+export const Movies = observer(() => {
+  const { movie } = useContext(Context);
+
+  useEffect(() => {
+    fetchGenres().then((data) => movie.setGenres(data));
+  }, []);
+
   return (
     <Container>
       <Row className="mt-2">
@@ -15,4 +28,4 @@ export const Movies = () => {
       </Row>
     </Container>
   );
-};
+});

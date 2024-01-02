@@ -2,13 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 export default class MovieStore {
   constructor() {
-    this._genres = [
-      { id: 1, name: "action" },
-      { id: 2, name: "drama" },
-      { id: 3, name: "fantastic" },
-      { id: 4, name: "historical" },
-      { id: 5, name: "horror" },
-    ];
+    this._genres = [];
 
     this._movies = [
       {
