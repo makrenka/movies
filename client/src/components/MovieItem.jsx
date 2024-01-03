@@ -18,7 +18,11 @@ export const MovieItem = ({ movie }) => {
       onClick={() => navigate(MOVIE_PAGE_ROUTE + "/" + movie.id)}
     >
       <Card style={{ width: 150, cursor: "pointer" }} border="light">
-        <Image width={150} height={150} src={movie.img} />
+        <Image
+          width={150}
+          height={150}
+          src={process.env.REACT_APP_API_URL + movie.img}
+        />
         <div className="d-flex flex-column justify-content-between align-items-start mt-2">
           <h6 className="mb-0">{movie.title}</h6>
           <p className="mb-0">genre</p>

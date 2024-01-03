@@ -1,13 +1,40 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import { Context } from "../../index";
+import { createMovie, fetchGenres } from "../../http/movieAPI";
 
-export const CreateMovie = ({ show, onHide }) => {
+export const CreateMovie = observer(({ show, onHide }) => {
   const { movie } = useContext(Context);
+  const [title, setTitle] = useState("");
+  const [director, setDirector] = useState("");
+  const [file, setFile] = useState(null);
+  const [year, setYear] = useState("");
+  const [summary, setSummary] = useState("");
+
+  useEffect(() => {
+    fetchGenres().then((data) => movie.setGenres(data));
+  }, []);
+
+  const selectFile = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const addMovie = () => {
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("director", director);
+    formData.append("img", file);
+    formData.append("year", year);
+    formData.append("summary", summary);
+    formData.append("genreId", movie.selectedGenre.id);
+    createMovie(formData).then((data) => onHide(""));
+  };
 
   return (
     <Modal size="lg" centered show={show} onHide={onHide}>
@@ -17,16 +44,33 @@ export const CreateMovie = ({ show, onHide }) => {
       <Modal.Body>
         <Form>
           <Dropdown>
-            <Dropdown.Toggle>Select genre</Dropdown.Toggle>
+            <Dropdown.Toggle>
+              {movie.selectedGenre.name || "Select genre"}
+            </Dropdown.Toggle>
             <Dropdown.Menu>
               {movie.genres.map((genre) => (
-                <Dropdown.Item key={genre.id}>{genre.name}</Dropdown.Item>
+                <Dropdown.Item
+                  key={genre.id}
+                  onClick={() => movie.setSelectedGenre(genre)}
+                >
+                  {genre.name}
+                </Dropdown.Item>
               ))}
             </Dropdown.Menu>
           </Dropdown>
-          <Form.Control className="mt-3" placeholder="Enter movie title" />
-          <Form.Control className="mt-3" placeholder="Enter director name" />
-          <Form.Control className="mt-3" type="file" />
+          <Form.Control
+            className="mt-3"
+            placeholder="Enter movie title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Form.Control
+            className="mt-3"
+            placeholder="Enter director name"
+            value={director}
+            onChange={(e) => setDirector(e.target.value)}
+          />
+          <Form.Control className="mt-3" type="file" onChange={selectFile} />
           <Form.Control
             className="mt-3"
             placeholder="Enter year"
@@ -34,12 +78,16 @@ export const CreateMovie = ({ show, onHide }) => {
             min={1900}
             max={2024}
             step={1}
+            value={year}
+            onChange={(e) => setYear(Number(e.target.value))}
           />
           <Form.Control
             as="textarea"
             rows={5}
             className="mt-3"
             placeholder="Enter summary"
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
           />
         </Form>
       </Modal.Body>
@@ -47,10 +95,10 @@ export const CreateMovie = ({ show, onHide }) => {
         <Button variant="outline-danger" onClick={onHide}>
           Close
         </Button>
-        <Button variant="outline-success" onClick={onHide}>
+        <Button variant="outline-success" onClick={addMovie}>
           Add
         </Button>
       </Modal.Footer>
     </Modal>
   );
-};
+});
