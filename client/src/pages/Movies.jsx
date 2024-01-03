@@ -8,14 +8,25 @@ import { Context } from "..";
 import { GenresBar } from "../components/GenresBar";
 import { MoviesList } from "../components/MoviesList";
 import { fetchGenres, fetchMovies } from "../http/movieAPI";
+import { Pages } from "../components/Pages";
 
 export const Movies = observer(() => {
   const { movie } = useContext(Context);
 
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));
-    fetchMovies().then((data) => movie.setMovies(data.rows));
+    // fetchMovies(null, 1, 4).then((data) => {
+    //   movie.setMovies(data.rows);
+    //   movie.setTotalCount(data.count);
+    // });
   }, []);
+
+  useEffect(() => {
+    fetchMovies(movie.selectedGenre.id, movie.page, 4).then((data) => {
+      movie.setMovies(data.rows);
+      movie.setTotalCount(data.count);
+    });
+  }, [movie.selectedGenre.id, movie.page]);
 
   return (
     <Container>
@@ -25,6 +36,7 @@ export const Movies = observer(() => {
         </Col>
         <Col md={9}>
           <MoviesList />
+          <Pages />
         </Col>
       </Row>
     </Container>

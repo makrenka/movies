@@ -1,5 +1,4 @@
 import { $authHost, $host } from ".";
-import { jwtDecode } from "jwt-decode";
 
 export const createGenre = async (genre) => {
   const { data } = await $authHost.post("api/genres", genre);
@@ -16,8 +15,14 @@ export const createMovie = async (movie) => {
   return data;
 };
 
-export const fetchMovies = async () => {
-  const { data } = await $host.get("api/movie");
+export const fetchMovies = async (genreId, page, limit = 5) => {
+  const { data } = await $host.get("api/movie", {
+    params: {
+      genreId,
+      page,
+      limit,
+    },
+  });
   return data;
 };
 
