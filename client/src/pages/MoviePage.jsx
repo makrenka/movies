@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
@@ -7,9 +8,9 @@ import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
-import movieImg from "../assets/51GA6V6VE1L._AC_UF1000,1000_QL80_.jpg";
-import bigStar from "../assets/big-star.png";
 import { fetchOneMovie } from "../http/movieAPI";
+
+import bigStar from "../assets/big-star.png";
 
 export const Movie = () => {
   const [movie, setMovie] = useState({ info: [] });

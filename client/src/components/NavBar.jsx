@@ -13,10 +13,12 @@ import { observer } from "mobx-react-lite";
 export const NavBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
+  console.log(user);
 
   const logOut = () => {
     user.setUser({});
     user.setIsAuth(false);
+    navigate(MOVIES_ROUTE);
   };
 
   return (

@@ -15,10 +15,6 @@ export const Movies = observer(() => {
 
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));
-    // fetchMovies(null, 1, 4).then((data) => {
-    //   movie.setMovies(data.rows);
-    //   movie.setTotalCount(data.count);
-    // });
   }, []);
 
   useEffect(() => {
@@ -30,7 +26,7 @@ export const Movies = observer(() => {
 
   return (
     <Container>
-      <Row className="mt-2">
+      <Row className="mt-4">
         <Col md={3}>
           <GenresBar />
         </Col>

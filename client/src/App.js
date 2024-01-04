@@ -1,15 +1,14 @@
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import Spinner from "react-bootstrap/Spinner";
 
 import { AppRouter } from "./components/AppRouter";
 import { NavBar } from "./components/NavBar";
-import { observer } from "mobx-react-lite";
-import { useContext, useEffect, useState } from "react";
 import { Context } from ".";
 import { check } from "./http/userAPI";
-import { Spinner } from "react-bootstrap";
 
-// import "./App.css";
-// import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = observer(() => {
   const { user } = useContext(Context);
@@ -18,8 +17,9 @@ const App = observer(() => {
   useEffect(() => {
     check()
       .then((data) => {
-        user.setUser(true);
+        user.setUser(data);
         user.setIsAuth(true);
+        console.log(data);
       })
       .finally(() => setLoading(false));
   }, []);

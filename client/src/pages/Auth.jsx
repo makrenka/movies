@@ -29,8 +29,9 @@ export const Auth = observer(() => {
       } else {
         data = await registration(email, password);
       }
-      user.setUser(user);
+      user.setUser(data);
       user.setIsAuth(true);
+      user.setName(data.email.split("@")[0]);
       navigate(MOVIES_ROUTE);
     } catch (e) {
       alert(e.response.data.message);
