@@ -1,5 +1,6 @@
 import { $authHost, $host } from ".";
 import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 
 export const registration = async (email, password) => {
   const { data } = await $host.post("api/user/registration", {
@@ -16,7 +17,8 @@ export const login = async (email, password) => {
     email,
     password,
   });
-  localStorage.setItem("token", data.token);
+  Cookies.set("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data));
   return jwtDecode(data.token);
 };
 
