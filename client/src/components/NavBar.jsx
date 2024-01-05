@@ -13,11 +13,11 @@ import { observer } from "mobx-react-lite";
 export const NavBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
-  console.log(user);
 
   const logOut = () => {
     user.setUser({});
     user.setIsAuth(false);
+    localStorage.removeItem("token");
     navigate(MOVIES_ROUTE);
   };
 
@@ -28,13 +28,19 @@ export const NavBar = observer(() => {
           Online-movies
         </NavLink>
         {user.isAuth ? (
-          <Nav style={{ color: "white" }}>
-            <Button
-              variant="outline-light"
-              onClick={() => navigate(ADMIN_ROUTE)}
-            >
-              Admin
-            </Button>
+          <Nav style={{ color: "white", alignItems: "center" }}>
+            <p style={{ color: "white", marginBottom: 0, marginRight: "20px" }}>
+              Hello,{" "}
+              {JSON.parse(localStorage.getItem("token")).email.split("@")[0]}
+            </p>
+            {JSON.parse(localStorage.getItem("token")).role === "ADMIN" ? (
+              <Button
+                variant="outline-light"
+                onClick={() => navigate(ADMIN_ROUTE)}
+              >
+                Admin
+              </Button>
+            ) : null}
             <Button
               variant="outline-light"
               className="ms-2"
