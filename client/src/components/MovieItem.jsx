@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Image from "react-bootstrap/Image";
@@ -5,26 +6,33 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 
 import { MOVIE_PAGE_ROUTE } from "../utils/route-consts";
+import { Context } from "..";
 
 import star from "../assets/ant-design_star-outlined.png";
 
-export const MovieItem = ({ movie }) => {
+export const MovieItem = ({ movieItem }) => {
   const navigate = useNavigate();
+  const { movie } = useContext(Context);
 
   return (
-    <Col md={3} onClick={() => navigate(MOVIE_PAGE_ROUTE + "/" + movie.id)}>
+    <Col md={3} onClick={() => navigate(MOVIE_PAGE_ROUTE + "/" + movieItem.id)}>
       <Card style={{ width: 150, cursor: "pointer" }} border="light">
         <Image
-          width={150}
-          height={150}
-          src={process.env.REACT_APP_API_URL + movie.img}
+          width={220}
+          height={326}
+          src={process.env.REACT_APP_API_URL + movieItem.img}
         />
         <div className="d-flex flex-column justify-content-between align-items-start mt-2">
-          <h6 className="mb-0">{movie.title}</h6>
-          <p className="mb-0">genre</p>
-          <p className="mb-0">{movie.year} year</p>
+          <h6 className="mb-0">{movieItem.title}</h6>
+          <p className="mb-0">
+            {
+              movie.genres.filter((genre) => genre.id === movieItem.genreId)[0]
+                .name
+            }
+          </p>
+          <p className="mb-0">{movieItem.year} year</p>
           <div className="d-flex align-items-center">
-            <p className="mb-0 me-2">{movie.rating}</p>
+            <p className="mb-0 me-2">{movieItem.rating}</p>
             <Image width={20} height={20} src={star} />
           </div>
         </div>

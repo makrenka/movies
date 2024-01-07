@@ -1,5 +1,4 @@
 const { Genres } = require("../models/models");
-const ApiError = require("../error/ApiError");
 
 class GenresController {
   async create(req, res) {

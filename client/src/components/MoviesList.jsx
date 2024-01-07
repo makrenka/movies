@@ -8,11 +8,12 @@ import { MovieItem } from "./MovieItem";
 
 export const MoviesList = observer(() => {
   const { movie } = useContext(Context);
+  // console.log(movie.movies.genreId);
 
   return (
     <Row>
       {movie.movies.map((movie) => (
-        <MovieItem key={movie.id} movie={movie} />
+        <MovieItem key={movie.id} movieItem={movie} />
       ))}
     </Row>
   );

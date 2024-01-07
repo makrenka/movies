@@ -74,6 +74,10 @@ const Movie = sequelize.define("movie", {
     unique: true,
     allowNull: false,
   },
+  summary: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 const Genres = sequelize.define("genres", {

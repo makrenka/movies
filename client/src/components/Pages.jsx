@@ -10,7 +10,7 @@ export const Pages = observer(() => {
   const pageCount = Math.ceil(movie.totalCount / movie.limit);
   const pages = [];
 
-  for (let i = 0; i < pageCount - 1; i++) {
+  for (let i = 0; i < pageCount; i++) {
     pages.push(i + 1);
   }
 
