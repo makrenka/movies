@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
 import { authRoutes, publicRoutes } from "../routes";
 import { Context } from "..";
 
-export const AppRouter = () => {
+export const AppRouter = observer(() => {
   const { user } = useContext(Context);
 
   return (
@@ -16,7 +17,7 @@ export const AppRouter = () => {
       {publicRoutes.map(({ path, Component }) => (
         <Route key={path} path={path} element={<Component />} />
       ))}
-      {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
-};
+});
