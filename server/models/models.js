@@ -44,7 +44,7 @@ const ListMovie = sequelize.define("list_movie", {
   },
 });
 
-const Movie = sequelize.define("movie", {
+const Movie = sequelize.define("movies", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -69,11 +69,11 @@ const Movie = sequelize.define("movie", {
     type: DataTypes.STRING,
     defaultValue: 0,
   },
-  genreId: {
-    type: DataTypes.INTEGER,
-    unique: true,
-    allowNull: false,
-  },
+  // genreId: {
+  //   type: DataTypes.INTEGER,
+  //   unique: true,
+  //   allowNull: false,
+  // },
   summary: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -103,7 +103,7 @@ const Rating = sequelize.define("rating", {
   },
 });
 
-const MovieGenre = sequelize.define("movie_genre", {
+const MovieGenre = sequelize.define("movie_genres", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

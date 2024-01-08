@@ -8,7 +8,6 @@ import { MovieItem } from "./MovieItem";
 
 export const MoviesList = observer(() => {
   const { movie } = useContext(Context);
-  // console.log(movie.movies.genreId);
 
   return (
     <Row>
