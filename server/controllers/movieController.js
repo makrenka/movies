@@ -35,16 +35,19 @@ class MovieController {
       offset,
       include: Genres,
     });
-    genreId = movies.genres;
-    console.log(movies.rows.map((movie) => movie.genres)[0]);
+    genreId = movies.rows
+      .map((movie) => movie.genres)
+      .map((item) => item.map((genre) => genre.id));
+    console.log(genreId);
     if (!genreId) {
       movies = await Movie.findAndCountAll({ limit, offset, include: Genres });
     } else {
       movies = await Movie.findAndCountAll({
-        where: { genreId },
+        // where: { genreId },
         limit,
         offset,
         include: Genres,
+        genreId,
       });
     }
     return res.json(movies);
