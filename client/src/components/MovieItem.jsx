@@ -12,7 +12,6 @@ import star from "../assets/ant-design_star-outlined.png";
 
 export const MovieItem = ({ movieItem }) => {
   const navigate = useNavigate();
-  const { movie } = useContext(Context);
 
   return (
     <Col md={3} onClick={() => navigate(MOVIE_PAGE_ROUTE + "/" + movieItem.id)}>
@@ -24,12 +23,9 @@ export const MovieItem = ({ movieItem }) => {
         />
         <div className="d-flex flex-column justify-content-between align-items-start mt-2">
           <h6 className="mb-0">{movieItem.title}</h6>
-          {/* <p className="mb-0">
-            {
-              movie.genres.filter((genre) => genre.id === movieItem.genreId)[0]
-                .name
-            }
-          </p> */}
+          <p className="mb-0">
+            {movieItem.genres.map((genre) => genre.name).join(", ")}
+          </p>
           <p className="mb-0">{movieItem.year} year</p>
           <div className="d-flex align-items-center">
             <p className="mb-0 me-2">{movieItem.rating}</p>

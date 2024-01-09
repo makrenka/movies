@@ -85,13 +85,12 @@ export const Movie = () => {
               border: "5px solid lightgray",
             }}
           >
-            {/* <h3>
-              {
-                movie.genres.filter(
-                  (genre) => genre.id === movieInfo.genreId
-                )[0]?.name
-              }
-            </h3> */}
+            <div>
+              <h4>Genre:</h4>
+              <p style={{ fontSize: 20 }}>
+                {movieInfo.genres.map((genre) => genre.name).join(", ")}
+              </p>
+            </div>
             <Button variant="outline-dark">Add to your list</Button>
           </Card>
         </Col>

@@ -1,6 +1,6 @@
 const uuid = require("uuid");
 const path = require("path");
-const { Movie } = require("../models/models");
+const { Movie, Genres, MovieGenre } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class MovieController {
@@ -30,14 +30,21 @@ class MovieController {
     page = page || 1;
     limit = +limit || 9;
     let offset = page * limit - limit;
-    let movies;
+    let movies = await Movie.findAndCountAll({
+      limit,
+      offset,
+      include: Genres,
+    });
+    genreId = movies.genres;
+    console.log(movies.rows.map((movie) => movie.genres)[0]);
     if (!genreId) {
-      movies = await Movie.findAndCountAll({ limit, offset });
+      movies = await Movie.findAndCountAll({ limit, offset, include: Genres });
     } else {
       movies = await Movie.findAndCountAll({
         where: { genreId },
         limit,
         offset,
+        include: Genres,
       });
     }
     return res.json(movies);
@@ -45,7 +52,8 @@ class MovieController {
 
   async getOne(req, res) {
     const { id } = req.params;
-    const movie = await Movie.findOne({ where: { id } });
+    const movie = await Movie.findOne({ where: { id }, include: Genres });
+    console.log(movie.genres.map((genres) => genres.id));
     return res.json(movie);
   }
 }
