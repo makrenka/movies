@@ -43,7 +43,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Dropdown>
+          <Dropdown autoClose="outside">
             <Dropdown.Toggle>Select genre</Dropdown.Toggle>
             <Dropdown.Menu>
               {movie.genres.map((genre) => (
