@@ -88,7 +88,7 @@ export const Movie = () => {
             <div>
               <h4>Genre:</h4>
               <p style={{ fontSize: 20 }}>
-                {movieInfo.genres.map((genre) => genre.name).join(", ")}
+                {movieInfo.genres?.map((genre) => genre.name).join(", ")}
               </p>
             </div>
             <Button variant="outline-dark">Add to your list</Button>

@@ -1,12 +1,12 @@
 const uuid = require("uuid");
 const path = require("path");
-const { Movie, Genres, MovieGenre } = require("../models/models");
+const { Movie, Genres } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class MovieController {
   async create(req, res, next) {
     try {
-      const { title, director, year, genreId } = req.body;
+      const { title, director, year, id } = req.body;
       const { img } = req.files;
       let fileName = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
@@ -15,7 +15,7 @@ class MovieController {
         title,
         director,
         year,
-        genreId,
+        genres: [{ id }],
         img: fileName,
       });
 
@@ -26,28 +26,29 @@ class MovieController {
   }
 
   async getAll(req, res) {
-    let { genreId, limit, page } = req.query;
+    let { id, limit, page } = req.query;
     page = page || 1;
     limit = +limit || 9;
     let offset = page * limit - limit;
-    let movies = await Movie.findAndCountAll({
-      limit,
-      offset,
-      include: Genres,
-    });
-    genreId = movies.rows
-      .map((movie) => movie.genres)
-      .map((item) => item.map((genre) => genre.id));
-    console.log(genreId);
-    if (!genreId) {
-      movies = await Movie.findAndCountAll({ limit, offset, include: Genres });
-    } else {
+    let movies;
+    if (!id) {
       movies = await Movie.findAndCountAll({
-        // where: { genreId },
         limit,
         offset,
-        include: Genres,
-        genreId,
+        include: [Genres],
+        distinct: true,
+      });
+    } else {
+      movies = await Movie.findAndCountAll({
+        limit,
+        offset,
+        include: [
+          {
+            model: Genres,
+            where: { id },
+          },
+        ],
+        distinct: true,
       });
     }
     return res.json(movies);

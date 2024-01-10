@@ -14,7 +14,11 @@ export const MovieItem = ({ movieItem }) => {
   const navigate = useNavigate();
 
   return (
-    <Col md={3} onClick={() => navigate(MOVIE_PAGE_ROUTE + "/" + movieItem.id)}>
+    <Col
+      md={4}
+      onClick={() => navigate(MOVIE_PAGE_ROUTE + "/" + movieItem.id)}
+      style={{ marginBottom: 30 }}
+    >
       <Card style={{ width: 150, cursor: "pointer" }} border="light">
         <Image
           width={220}

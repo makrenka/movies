@@ -21,7 +21,7 @@ export const Movies = observer(() => {
   }, []);
 
   useEffect(() => {
-    fetchMovies(movie.selectedGenre.id, movie.page, 4)
+    fetchMovies(movie.selectedGenre.id, movie.page, 9)
       .then((data) => {
         movie.setMovies(data.rows);
         movie.setTotalCount(data.count);

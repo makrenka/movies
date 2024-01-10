@@ -14,8 +14,10 @@ export const Pages = observer(() => {
     pages.push(i + 1);
   }
 
+  if (pages.length === 1) return null;
+
   return (
-    <Pagination className="mt-5">
+    <Pagination className="mt-2 justify-content-center">
       {pages.map((page) => (
         <Pagination.Item
           key={page}

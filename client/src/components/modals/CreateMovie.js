@@ -44,16 +44,18 @@ export const CreateMovie = observer(({ show, onHide }) => {
       <Modal.Body>
         <Form>
           <Dropdown>
-            <Dropdown.Toggle>
-              {movie.selectedGenre.name || "Select genre"}
-            </Dropdown.Toggle>
+            <Dropdown.Toggle>Select genre</Dropdown.Toggle>
             <Dropdown.Menu>
               {movie.genres.map((genre) => (
                 <Dropdown.Item
                   key={genre.id}
-                  onClick={() => movie.setSelectedGenre(genre)}
+                  // onClick={() => movie.setSelectedGenre(genre)}
+                  style={{ display: "flex", alignItems: "center" }}
                 >
-                  {genre.name}
+                  <Form.Check aria-label="option 1" />
+                  <p style={{ marginBottom: 0, marginLeft: 10 }}>
+                    {genre.name}
+                  </p>
                 </Dropdown.Item>
               ))}
             </Dropdown.Menu>

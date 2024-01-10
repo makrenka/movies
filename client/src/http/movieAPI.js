@@ -15,10 +15,10 @@ export const createMovie = async (movie) => {
   return data;
 };
 
-export const fetchMovies = async (genreId, page, limit = 5) => {
+export const fetchMovies = async (id, page, limit = 5) => {
   const { data } = await $host.get("api/movie", {
     params: {
-      genreId,
+      id,
       page,
       limit,
     },
