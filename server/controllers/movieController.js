@@ -25,6 +25,22 @@ class MovieController {
     }
   }
 
+  // create/update with Many to Many association in Node.js sequelize and PostgreSQL
+
+  // industries: [
+  //   { value: 'Gaming', label: 'Gaming' },
+  //   { value: 'Computer Science', label: 'Computer Science' }
+  //  ]
+
+  //  const company = await Company.create({
+  //     company_name: companyName,
+  //  });
+
+  //  const industry = await Industry.findAll({
+  //     where: { industry_name: { [Op.in]: _.map(industries, o => o.label) } }
+  //  });
+  //  await company.addIndustry(industry);
+
   async getAll(req, res) {
     let { id, limit, page } = req.query;
     page = page || 1;

@@ -4,7 +4,7 @@ export default class MovieStore {
   constructor() {
     this._genres = [];
     this._movies = [];
-    this._selectedGenre = {};
+    this._selectedGenre = [{}];
     this._page = 1;
     this._totalCount = 0;
     this._limit = 9;
