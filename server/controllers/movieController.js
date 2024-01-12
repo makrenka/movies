@@ -4,9 +4,9 @@ const { Movie, Genres } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class MovieController {
-  async create(req, res, next) {
+  async createMovie(req, res, next) {
     try {
-      const { title, director, year, id } = req.body;
+      const { title, director, year } = req.body;
       const { img } = req.files;
       let fileName = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
@@ -15,7 +15,6 @@ class MovieController {
         title,
         director,
         year,
-        genres: [{ id }],
         img: fileName,
       });
 
@@ -23,6 +22,29 @@ class MovieController {
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }
+  }
+
+  async addGenres(movieId, genreId) {
+    return Movie.findByPk(movieId)
+      .then((movie) => {
+        if (!movie) {
+          console.log("Movie not found");
+          return null;
+        }
+        return Genres.findByPk(genreId).then((genre) => {
+          if (!genre) {
+            console.log("Genre not found");
+            return null;
+          }
+
+          movie.addGenres(genre);
+          console.log(`>> added Genre id=${genre.id} to Movie id=${movie.id}`);
+          return movie;
+        });
+      })
+      .catch((err) => {
+        console.log(">> Error while adding Genre to Movie: ", err);
+      });
   }
 
   // create/update with Many to Many association in Node.js sequelize and PostgreSQL

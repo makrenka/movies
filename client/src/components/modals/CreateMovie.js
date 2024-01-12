@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
+import uuid from "react-uuid";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -7,15 +8,18 @@ import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import { Context } from "../../index";
-import { createMovie, fetchGenres } from "../../http/movieAPI";
+import { addGenres, createMovie, fetchGenres } from "../../http/movieAPI";
 
 export const CreateMovie = observer(({ show, onHide }) => {
   const { movie } = useContext(Context);
+
   const [title, setTitle] = useState("");
   const [director, setDirector] = useState("");
   const [file, setFile] = useState(null);
   const [year, setYear] = useState("");
   const [summary, setSummary] = useState("");
+
+  const movieId = uuid();
 
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));
@@ -27,13 +31,22 @@ export const CreateMovie = observer(({ show, onHide }) => {
 
   const addMovie = () => {
     const formData = new FormData();
+    formData.append("id", movieId);
     formData.append("title", title);
     formData.append("director", director);
     formData.append("img", file);
     formData.append("year", year);
     formData.append("summary", summary);
-    formData.append("genreId", movie.selectedGenre.id);
     createMovie(formData).then((data) => onHide(""));
+  };
+
+  const addGenresForMovie = (movieId, genreId) => {
+    const formData = new FormData();
+    formData.append("movieId", movieId);
+    formData.append("genreId", genreId);
+    addGenres(formData).catch((err) => {
+      console.log(">> Error while adding Genre to Movie: ", err);
+    });
   };
 
   return (
@@ -57,7 +70,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
                     <Form.Check.Input
                       type="checkbox"
                       style={{ cursor: "pointer" }}
-                      onClick={() => movie.setSelectedGenre(genre)}
+                      onClick={addGenresForMovie(movieId, genre.id)}
                     />
                     <Form.Check.Label style={{ cursor: "pointer" }}>
                       {genre.name}

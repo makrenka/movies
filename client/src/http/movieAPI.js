@@ -15,6 +15,11 @@ export const createMovie = async (movie) => {
   return data;
 };
 
+export const addGenres = async (genreId) => {
+  const { data } = await $authHost.post("api/movie", genreId);
+  return data;
+};
+
 export const fetchMovies = async (id, page, limit = 5) => {
   const { data } = await $host.get("api/movie", {
     params: {
