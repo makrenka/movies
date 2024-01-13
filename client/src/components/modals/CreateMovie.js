@@ -18,8 +18,9 @@ export const CreateMovie = observer(({ show, onHide }) => {
   const [file, setFile] = useState(null);
   const [year, setYear] = useState("");
   const [summary, setSummary] = useState("");
+  const [genreId, setGenreId] = useState("");
 
-  const movieId = uuid();
+  const movieId = Date.now();
 
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));
@@ -27,6 +28,15 @@ export const CreateMovie = observer(({ show, onHide }) => {
 
   const selectFile = (e) => {
     setFile(e.target.files[0]);
+  };
+
+  const addGenresForMovie = (movieId, genreId) => {
+    const formData = new FormData();
+    formData.append("movieId", movieId);
+    formData.append("genreId", genreId);
+    addGenres(formData).catch((err) => {
+      console.log(">> Error while adding Genre to Movie: ", err);
+    });
   };
 
   const addMovie = () => {
@@ -37,16 +47,9 @@ export const CreateMovie = observer(({ show, onHide }) => {
     formData.append("img", file);
     formData.append("year", year);
     formData.append("summary", summary);
-    createMovie(formData).then((data) => onHide(""));
-  };
-
-  const addGenresForMovie = (movieId, genreId) => {
-    const formData = new FormData();
-    formData.append("movieId", movieId);
-    formData.append("genreId", genreId);
-    addGenres(formData).catch((err) => {
-      console.log(">> Error while adding Genre to Movie: ", err);
-    });
+    createMovie(formData)
+      .then(addGenresForMovie(movieId, genreId))
+      .then((data) => onHide(""));
   };
 
   return (
@@ -70,7 +73,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
                     <Form.Check.Input
                       type="checkbox"
                       style={{ cursor: "pointer" }}
-                      onClick={addGenresForMovie(movieId, genre.id)}
+                      onClick={() => setGenreId(genre.id)}
                     />
                     <Form.Check.Label style={{ cursor: "pointer" }}>
                       {genre.name}

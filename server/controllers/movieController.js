@@ -6,16 +6,18 @@ const ApiError = require("../error/ApiError");
 class MovieController {
   async createMovie(req, res, next) {
     try {
-      const { title, director, year } = req.body;
+      const { id, title, director, year, summary } = req.body;
       const { img } = req.files;
       let fileName = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
 
       const movie = await Movie.create({
+        id,
         title,
         director,
         year,
         img: fileName,
+        summary,
       });
 
       return res.json(movie);

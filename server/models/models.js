@@ -46,7 +46,7 @@ const ListMovie = sequelize.define("list_movie", {
 
 const Movie = sequelize.define("movies", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   },
