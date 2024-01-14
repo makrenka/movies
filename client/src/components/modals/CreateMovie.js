@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import uuid from "react-uuid";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -31,12 +30,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
   };
 
   const addGenresForMovie = (movieId, genreId) => {
-    const formData = new FormData();
-    formData.append("movieId", movieId);
-    formData.append("genreId", genreId);
-    addGenres(formData).catch((err) => {
-      console.log(">> Error while adding Genre to Movie: ", err);
-    });
+    addGenres({ movieId, genreId });
   };
 
   const addMovie = () => {
@@ -47,9 +41,8 @@ export const CreateMovie = observer(({ show, onHide }) => {
     formData.append("img", file);
     formData.append("year", year);
     formData.append("summary", summary);
-    createMovie(formData)
-      .then(addGenresForMovie(movieId, genreId))
-      .then((data) => onHide(""));
+    createMovie(formData).then((data) => onHide(""));
+    addGenresForMovie(movieId, genreId);
   };
 
   return (

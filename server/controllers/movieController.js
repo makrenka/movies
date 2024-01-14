@@ -1,6 +1,6 @@
 const uuid = require("uuid");
 const path = require("path");
-const { Movie, Genres } = require("../models/models");
+const { Movie, Genres, MovieGenre } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class MovieController {
@@ -26,28 +26,41 @@ class MovieController {
     }
   }
 
-  async addGenres(movieId, genreId) {
-    return Movie.findByPk(movieId)
-      .then((movie) => {
-        if (!movie) {
-          console.log("Movie not found");
-          return null;
-        }
-        return Genres.findByPk(genreId).then((genre) => {
-          if (!genre) {
-            console.log("Genre not found");
-            return null;
-          }
-
-          movie.addGenres(genre);
-          console.log(`>> added Genre id=${genre.id} to Movie id=${movie.id}`);
-          return movie;
-        });
-      })
-      .catch((err) => {
-        console.log(">> Error while adding Genre to Movie: ", err);
-      });
+  async addGenres(req, res, next) {
+    try {
+      const { movieId, genreId } = req.body;
+      const movieGenre = await MovieGenre.create({ movieId, genreId });
+      return res.json(movieGenre);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   }
+
+  // async addGenres(req, res, next) {
+  //   const { movieId, genreId } = req.body;
+  //   try {
+  //     const movie = await Movie.findByPk(movieId).then((movie) => {
+  //       if (!movie) {
+  //         console.log("Movie not found");
+  //         return null;
+  //       }
+  //       return Genres.findByPk(genreId).then((genre) => {
+  //         if (!genre) {
+  //           console.log("Genre not found");
+  //           return null;
+  //         }
+
+  //         movie.addGenres(genre);
+  //         console.log(`>> added Genre id=${genre.id} to Movie id=${movie.id}`);
+  //         return movie;
+  //       });
+  //     });
+
+  //     return res.json(movie);
+  //   } catch (e) {
+  //     next(ApiError.badRequest(e.message));
+  //   }
+  // }
 
   // create/update with Many to Many association in Node.js sequelize and PostgreSQL
 

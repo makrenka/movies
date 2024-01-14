@@ -15,8 +15,8 @@ export const createMovie = async (movie) => {
   return data;
 };
 
-export const addGenres = async (genreId) => {
-  const { data } = await $authHost.post("api/movie", genreId);
+export const addGenres = async (genres) => {
+  const { data } = await $authHost.post("api/movie/genres", genres);
   return data;
 };
 
