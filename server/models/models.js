@@ -46,9 +46,8 @@ const ListMovie = sequelize.define("list_movie", {
 
 const Movie = sequelize.define("movies", {
   id: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.UUID,
     primaryKey: true,
-    autoIncrement: true,
   },
   title: {
     type: DataTypes.STRING,
@@ -69,13 +68,8 @@ const Movie = sequelize.define("movies", {
     type: DataTypes.STRING,
     defaultValue: 0,
   },
-  // genreId: {
-  //   type: DataTypes.INTEGER,
-  //   unique: true,
-  //   allowNull: false,
-  // },
   summary: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(1000),
     allowNull: true,
   },
 });
@@ -123,8 +117,12 @@ ListMovie.belongsTo(List);
 Movie.hasOne(ListMovie);
 ListMovie.belongsTo(Movie);
 
-Movie.belongsToMany(Genres, { through: MovieGenre });
-Genres.belongsToMany(Movie, { through: MovieGenre });
+Movie.belongsToMany(Genres, {
+  through: MovieGenre,
+});
+Genres.belongsToMany(Movie, {
+  through: MovieGenre,
+});
 
 Movie.hasMany(Rating);
 Rating.belongsTo(Movie);

@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
+import uuid from "react-uuid";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -19,7 +20,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
   const [summary, setSummary] = useState("");
   const [genreId, setGenreId] = useState("");
 
-  const movieId = Date.now();
+  const movieId = uuid();
 
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));
@@ -29,8 +30,11 @@ export const CreateMovie = observer(({ show, onHide }) => {
     setFile(e.target.files[0]);
   };
 
-  const addGenresForMovie = (movieId, genreId) => {
-    addGenres({ movieId, genreId });
+  const addGenresForMovie = (genreId) => {
+    const formData = new FormData();
+    formData.append("movieId", movieId);
+    formData.append("genreId", genreId);
+    addGenres(formData);
   };
 
   const addMovie = () => {
@@ -42,7 +46,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
     formData.append("year", year);
     formData.append("summary", summary);
     createMovie(formData).then((data) => onHide(""));
-    addGenresForMovie(movieId, genreId);
+    addGenresForMovie(genreId);
   };
 
   return (

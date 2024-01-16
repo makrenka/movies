@@ -1,5 +1,6 @@
 const uuid = require("uuid");
 const path = require("path");
+const { toBinaryUUID } = require("sequelize-binary-uuid");
 const { Movie, Genres, MovieGenre } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
@@ -29,7 +30,10 @@ class MovieController {
   async addGenres(req, res, next) {
     try {
       const { movieId, genreId } = req.body;
-      const movieGenre = await MovieGenre.create({ movieId, genreId });
+      const movieGenre = await MovieGenre.create({
+        movieId,
+        genreId,
+      });
       return res.json(movieGenre);
     } catch (e) {
       next(ApiError.badRequest(e.message));
@@ -38,8 +42,9 @@ class MovieController {
 
   // async addGenres(req, res, next) {
   //   const { movieId, genreId } = req.body;
+  //   const binaryId = toBinaryUUID(movieId);
   //   try {
-  //     const movie = await Movie.findByPk(movieId).then((movie) => {
+  //     const movie = await Movie.findByPk(binaryId).then((movie) => {
   //       if (!movie) {
   //         console.log("Movie not found");
   //         return null;
