@@ -18,7 +18,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
   const [file, setFile] = useState(null);
   const [year, setYear] = useState("");
   const [summary, setSummary] = useState("");
-  const [genreId, setGenreId] = useState("");
+  const [genreId, setGenreId] = useState([]);
 
   const movieId = uuid();
 
@@ -30,10 +30,10 @@ export const CreateMovie = observer(({ show, onHide }) => {
     setFile(e.target.files[0]);
   };
 
-  const addGenresForMovie = (genreId) => {
+  const addGenresForMovie = (genre) => {
     const formData = new FormData();
     formData.append("movieId", movieId);
-    formData.append("genreId", genreId);
+    formData.append("genreId", genre);
     addGenres(formData);
   };
 
@@ -70,7 +70,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
                     <Form.Check.Input
                       type="checkbox"
                       style={{ cursor: "pointer" }}
-                      onClick={() => setGenreId(genre.id)}
+                      onClick={() => setGenreId([...genreId, genre.id])}
                     />
                     <Form.Check.Label style={{ cursor: "pointer" }}>
                       {genre.name}

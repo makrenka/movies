@@ -1,6 +1,5 @@
 const uuid = require("uuid");
 const path = require("path");
-const { toBinaryUUID } = require("sequelize-binary-uuid");
 const { Movie, Genres, MovieGenre } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
@@ -30,58 +29,18 @@ class MovieController {
   async addGenres(req, res, next) {
     try {
       const { movieId, genreId } = req.body;
-      const movieGenre = await MovieGenre.create({
-        movieId,
-        genreId,
-      });
-      return res.json(movieGenre);
+      const genres = genreId.split(",");
+      for (let i = 0; i < genres.length; i++) {
+        const movieGenre = await MovieGenre.create({
+          movieId,
+          genreId: Number(genres[i]),
+        });
+        return res.json(movieGenre);
+      }
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }
   }
-
-  // async addGenres(req, res, next) {
-  //   const { movieId, genreId } = req.body;
-  //   const binaryId = toBinaryUUID(movieId);
-  //   try {
-  //     const movie = await Movie.findByPk(binaryId).then((movie) => {
-  //       if (!movie) {
-  //         console.log("Movie not found");
-  //         return null;
-  //       }
-  //       return Genres.findByPk(genreId).then((genre) => {
-  //         if (!genre) {
-  //           console.log("Genre not found");
-  //           return null;
-  //         }
-
-  //         movie.addGenres(genre);
-  //         console.log(`>> added Genre id=${genre.id} to Movie id=${movie.id}`);
-  //         return movie;
-  //       });
-  //     });
-
-  //     return res.json(movie);
-  //   } catch (e) {
-  //     next(ApiError.badRequest(e.message));
-  //   }
-  // }
-
-  // create/update with Many to Many association in Node.js sequelize and PostgreSQL
-
-  // industries: [
-  //   { value: 'Gaming', label: 'Gaming' },
-  //   { value: 'Computer Science', label: 'Computer Science' }
-  //  ]
-
-  //  const company = await Company.create({
-  //     company_name: companyName,
-  //  });
-
-  //  const industry = await Industry.findAll({
-  //     where: { industry_name: { [Op.in]: _.map(industries, o => o.label) } }
-  //  });
-  //  await company.addIndustry(industry);
 
   async getAll(req, res) {
     let { id, limit, page } = req.query;
