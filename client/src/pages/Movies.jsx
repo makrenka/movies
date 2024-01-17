@@ -51,8 +51,14 @@ export const Movies = observer(() => {
           <GenresBar />
         </Col>
         <Col md={9}>
-          <MoviesList />
-          <Pages />
+          {movie.movies.length ? (
+            <>
+              <MoviesList />
+              <Pages />
+            </>
+          ) : (
+            <h3 style={{ textAlign: "center" }}>Here's no movies yet</h3>
+          )}
         </Col>
       </Row>
     </Container>

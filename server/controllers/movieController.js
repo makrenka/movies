@@ -29,14 +29,11 @@ class MovieController {
   async addGenres(req, res, next) {
     try {
       const { movieId, genreId } = req.body;
-      const genres = genreId.split(",");
-      for (let i = 0; i < genres.length; i++) {
-        const movieGenre = await MovieGenre.create({
-          movieId,
-          genreId: Number(genres[i]),
-        });
-        return res.json(movieGenre);
-      }
+      const movieGenre = await MovieGenre.create({
+        movieId,
+        genreId,
+      });
+      return res.json(movieGenre);
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }

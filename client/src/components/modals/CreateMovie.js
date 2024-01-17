@@ -46,7 +46,7 @@ export const CreateMovie = observer(({ show, onHide }) => {
     formData.append("year", year);
     formData.append("summary", summary);
     createMovie(formData).then((data) => onHide(""));
-    addGenresForMovie(genreId);
+    genreId.forEach((i) => addGenresForMovie(i));
   };
 
   return (
