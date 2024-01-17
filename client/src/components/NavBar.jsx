@@ -7,7 +7,12 @@ import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 
 import { Context } from "..";
-import { ADMIN_ROUTE, LOGIN_ROUTE, MOVIES_ROUTE } from "../utils/route-consts";
+import {
+  ADMIN_ROUTE,
+  LIST_PAGE_ROUTE,
+  LOGIN_ROUTE,
+  MOVIES_ROUTE,
+} from "../utils/route-consts";
 import { observer } from "mobx-react-lite";
 import { jwtDecode } from "jwt-decode";
 
@@ -35,7 +40,12 @@ export const NavBar = observer(() => {
             <p style={{ color: "white", marginBottom: 0, marginRight: "20px" }}>
               Hello, {decodedToken.email.split("@")[0]}
             </p>
-            <Button variant="outline-light">Your list</Button>
+            <Button
+              variant="outline-light"
+              onClick={() => navigate(LIST_PAGE_ROUTE)}
+            >
+              Your list
+            </Button>
             {decodedToken.role === "ADMIN" ? (
               <Button
                 variant="outline-light"

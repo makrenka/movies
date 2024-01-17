@@ -45,8 +45,9 @@ export const CreateMovie = observer(({ show, onHide }) => {
     formData.append("img", file);
     formData.append("year", year);
     formData.append("summary", summary);
-    createMovie(formData).then((data) => onHide(""));
-    genreId.forEach((i) => addGenresForMovie(i));
+    createMovie(formData)
+      .then((data) => genreId.forEach((i) => addGenresForMovie(i)))
+      .then((data) => onHide(""));
   };
 
   return (
