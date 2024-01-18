@@ -1,15 +1,23 @@
-const { List } = require("../models/models");
+const { List, ListMovie, Movie } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class ListController {
-  async create(req, res) {
-    const { movie } = req.body;
-    const movieInList = await List.create({ movie });
-    return res.json({ movieInList });
+  async addMovie(req, res, next) {
+    try {
+      const { listId, movieId } = req.body;
+      const listMovie = await ListMovie.create({ listId, movieId });
+      return res.json(listMovie);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   }
 
-  async getAll(req, res) {
-    const moviesInList = await List.findAll();
+  async getMovies(req, res) {
+    const { userId } = req.query;
+    const moviesInList = await List.findAll({
+      where: userId,
+      include: [Movie],
+    });
     return res.json(moviesInList);
   }
 }

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -8,9 +8,15 @@ import { GenresBar } from "../components/GenresBar";
 import { MoviesList } from "../components/MoviesList";
 import { Pages } from "../components/Pages";
 import { Context } from "..";
+import { fetchUsers } from "../http/userAPI";
 
 export const List = () => {
   const { movie } = useContext(Context);
+  const { user } = useContext(Context);
+
+  useEffect(() => {
+    fetchUsers().then((data) => user.setUser(data));
+  }, []);
 
   return (
     <Container>

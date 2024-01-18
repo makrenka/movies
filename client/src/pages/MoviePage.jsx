@@ -19,6 +19,7 @@ export const Movie = () => {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const { movie } = useContext(Context);
+  const { user } = useContext(Context);
 
   useEffect(() => {
     fetchOneMovie(id)
@@ -31,7 +32,8 @@ export const Movie = () => {
       .then((data) => movie.setGenres(data))
       .finally(() => setLoading(false));
   }, []);
-  console.log();
+
+  const addMovieToList = () => {};
 
   if (loading) {
     return (

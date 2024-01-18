@@ -3,7 +3,7 @@ const listController = require("../controllers/listController");
 
 const router = new Router();
 
-router.post("/", listController.create);
-router.get("/", listController.getAll);
+router.post("/", listController.addMovie);
+router.get("/", listController.getMovies);
 
 module.exports = router;
