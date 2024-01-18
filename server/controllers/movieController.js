@@ -71,7 +71,6 @@ class MovieController {
   async getOne(req, res) {
     const { id } = req.params;
     const movie = await Movie.findOne({ where: { id }, include: Genres });
-    console.log(movie.genres.map((genres) => genres.id));
     return res.json(movie);
   }
 }

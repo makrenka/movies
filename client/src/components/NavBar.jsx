@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { jwtDecode } from "jwt-decode";
 
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -13,8 +15,6 @@ import {
   LOGIN_ROUTE,
   MOVIES_ROUTE,
 } from "../utils/route-consts";
-import { observer } from "mobx-react-lite";
-import { jwtDecode } from "jwt-decode";
 
 export const NavBar = observer(() => {
   const { user } = useContext(Context);

@@ -111,11 +111,8 @@ List.belongsTo(User);
 User.hasMany(Rating);
 Rating.belongsTo(User);
 
-List.hasMany(ListMovie);
-ListMovie.belongsTo(List);
-
-Movie.hasOne(ListMovie);
-ListMovie.belongsTo(Movie);
+Movie.belongsToMany(List, { through: ListMovie });
+List.belongsToMany(Movie, { through: ListMovie });
 
 Movie.belongsToMany(Genres, {
   through: MovieGenre,

@@ -60,35 +60,23 @@ export const CreateMovie = observer(({ show, onHide }) => {
           <Dropdown autoClose="outside">
             <Dropdown.Toggle>Select genre</Dropdown.Toggle>
             <Dropdown.Menu>
-              {movie.genres.map(
-                (genre) => (
-                  <Form.Check
-                    key={genre.id}
+              {movie.genres.map((genre) => (
+                <Form.Check
+                  key={genre.id}
+                  type="checkbox"
+                  id={genre.name}
+                  style={{ marginLeft: 25 }}
+                >
+                  <Form.Check.Input
                     type="checkbox"
-                    id={genre.name}
-                    style={{ marginLeft: 25 }}
-                  >
-                    <Form.Check.Input
-                      type="checkbox"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => setGenreId([...genreId, genre.id])}
-                    />
-                    <Form.Check.Label style={{ cursor: "pointer" }}>
-                      {genre.name}
-                    </Form.Check.Label>
-                  </Form.Check>
-                )
-                // <Dropdown.Item
-                //   key={genre.id}
-                // onClick={() => movie.setSelectedGenre(genre)}
-                // style={{ display: "flex", alignItems: "center" }}
-                // {
-                /* <p style={{ marginBottom: 0, marginLeft: 10 }}>
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setGenreId([...genreId, genre.id])}
+                  />
+                  <Form.Check.Label style={{ cursor: "pointer" }}>
                     {genre.name}
-                  </p> */
-                // }
-                // </Dropdown.Item>
-              )}
+                  </Form.Check.Label>
+                </Form.Check>
+              ))}
             </Dropdown.Menu>
           </Dropdown>
           <Form.Control

@@ -11,10 +11,17 @@ import { GenresBar } from "../components/GenresBar";
 import { MoviesList } from "../components/MoviesList";
 import { fetchGenres, fetchMovies } from "../http/movieAPI";
 import { Pages } from "../components/Pages";
+import { fetchUsers } from "../http/userAPI";
 
 export const Movies = observer(() => {
   const { movie } = useContext(Context);
+  const { user } = useContext(Context);
+
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUsers().then((data) => user.setUser(data));
+  }, []);
 
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));

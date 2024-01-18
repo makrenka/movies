@@ -15,7 +15,7 @@ class ListController {
   async getMovies(req, res) {
     const { userId } = req.query;
     const moviesInList = await List.findAll({
-      where: userId,
+      where: { userId },
       include: [Movie],
     });
     return res.json(moviesInList);

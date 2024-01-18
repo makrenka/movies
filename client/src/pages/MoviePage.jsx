@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -11,15 +12,21 @@ import Spinner from "react-bootstrap/Spinner";
 
 import { fetchGenres, fetchOneMovie } from "../http/movieAPI";
 import { Context } from "..";
+import { addMovie, fetchList } from "../http/listAPI";
+import { fetchUsers } from "../http/userAPI";
 
 import bigStar from "../assets/big-star.png";
 
 export const Movie = () => {
   const [movieInfo, setMovieInfo] = useState({ info: [] });
   const [loading, setLoading] = useState(true);
+  const [listId, setListId] = useState(null);
   const { id } = useParams();
   const { movie } = useContext(Context);
   const { user } = useContext(Context);
+
+  const token = localStorage.getItem("token");
+  const decodedToken = token ? jwtDecode(token) : null;
 
   useEffect(() => {
     fetchOneMovie(id)
@@ -33,7 +40,22 @@ export const Movie = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const addMovieToList = () => {};
+  useEffect(() => {
+    fetchUsers()
+      .then((data) => user.setUser(data))
+      .then((data) => {
+        const authUser = user.user.filter((i) => i.id === decodedToken.id);
+        const authUserId = authUser[0].id;
+        fetchList(authUserId).then((data) => setListId(data[0].id));
+      });
+  }, [user]);
+
+  const addMovieToList = () => {
+    const formData = new FormData();
+    formData.append("listId", listId);
+    formData.append("movieId", movieInfo.id);
+    addMovie(formData);
+  };
 
   if (loading) {
     return (
@@ -93,7 +115,9 @@ export const Movie = () => {
                 {movieInfo.genres?.map((genre) => genre.name).join(", ")}
               </p>
             </div>
-            <Button variant="outline-dark">Add to your list</Button>
+            <Button variant="outline-dark" onClick={addMovieToList}>
+              Add to your list
+            </Button>
           </Card>
         </Col>
       </Row>
