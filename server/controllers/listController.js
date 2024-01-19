@@ -1,4 +1,4 @@
-const { List, ListMovie, Movie } = require("../models/models");
+const { List, ListMovie, Movie, Genres } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class ListController {
@@ -16,7 +16,12 @@ class ListController {
     const { userId } = req.query;
     const moviesInList = await List.findAll({
       where: { userId },
-      include: [Movie],
+      include: [
+        {
+          model: Movie,
+          include: [Genres],
+        },
+      ],
     });
     return res.json(moviesInList);
   }

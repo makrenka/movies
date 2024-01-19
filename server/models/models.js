@@ -30,10 +30,10 @@ const List = sequelize.define("list", {
     primaryKey: true,
     autoIncrement: true,
   },
-  movie: {
-    type: DataTypes.STRING,
-    unique: true,
-  },
+  // movie: {
+  //   type: DataTypes.STRING,
+  //   unique: true,
+  // },
 });
 
 const ListMovie = sequelize.define("list_movie", {
