@@ -10,7 +10,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { GenresBar } from "../components/GenresBar";
 import { Pages } from "../components/Pages";
 import { Context } from "..";
-import { fetchGenres, fetchMovies } from "../http/movieAPI";
+import { fetchGenres } from "../http/movieAPI";
 import { fetchUsers } from "../http/userAPI";
 import { fetchList } from "../http/listAPI";
 import { MovieItem } from "../components/MovieItem";
@@ -37,15 +37,6 @@ export const List = observer(() => {
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));
   }, []);
-
-  // useEffect(() => {
-  //   fetchMovies(movie.selectedGenre.id, movie.page, 9)
-  //     .then((data) => {
-  //       movie.setMovies(data.rows);
-  //       movie.setTotalCount(data.count);
-  //     })
-  //     .finally(() => setLoading(false));
-  // }, [movie.selectedGenre.id, movie.page]);
 
   if (loading) {
     return (
@@ -77,21 +68,25 @@ export const List = observer(() => {
             <h3 style={{ marginBottom: 40, textAlign: "center" }}>
               Your movies' list:
             </h3>
-            {filteredMovies.length || !movie.selectedGenre.name ? (
+            {Boolean(list[0].movies.length) & !movie.selectedGenre.name ? (
               <>
                 <Row>
-                  {movie.selectedGenre.name
-                    ? filteredMovies.map((movie) => (
-                        <MovieItem key={movie.id} movieItem={movie} />
-                      ))
-                    : list[0].movies.map((movie) => (
-                        <MovieItem key={movie.id} movieItem={movie} />
-                      ))}
+                  {list[0].movies.map((movie) => (
+                    <MovieItem key={movie.id} movieItem={movie} />
+                  ))}
                 </Row>
                 <Pages />
               </>
+            ) : filteredMovies.length ? (
+              <Row>
+                {filteredMovies.map((movie) => (
+                  <MovieItem key={movie.id} movieItem={movie} />
+                ))}
+              </Row>
             ) : (
-              <h4 style={{ textAlign: "center" }}>Here's no movies yet</h4>
+              <h4 style={{ textAlign: "center", color: "red" }}>
+                Here's no movies yet
+              </h4>
             )}
           </Col>
         </Row>

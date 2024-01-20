@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { observer } from "mobx-react-lite";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -17,10 +18,10 @@ import { fetchUsers } from "../http/userAPI";
 
 import bigStar from "../assets/big-star.png";
 
-export const Movie = () => {
+export const Movie = observer(() => {
   const [movieInfo, setMovieInfo] = useState({ info: [] });
   const [loading, setLoading] = useState(true);
-  const [listId, setListId] = useState(null);
+
   const { id } = useParams();
   const { movie } = useContext(Context);
   const { user } = useContext(Context);
@@ -38,7 +39,7 @@ export const Movie = () => {
     fetchGenres()
       .then((data) => movie.setGenres(data))
       .finally(() => setLoading(false));
-  }, []);
+  }, [movie]);
 
   useEffect(() => {
     fetchUsers()
@@ -46,13 +47,13 @@ export const Movie = () => {
       .then((data) => {
         const authUser = user.user.filter((i) => i.id === decodedToken.id);
         const authUserId = authUser[0].id;
-        fetchList(authUserId).then((data) => setListId(data[0].id));
+        fetchList(authUserId).then((data) => movie.setList(data));
       });
-  }, [user]);
+  }, [user, movie.list[0]]);
 
   const addMovieToList = () => {
     const formData = new FormData();
-    formData.append("listId", listId);
+    formData.append("listId", movie.list[0].id);
     formData.append("movieId", movieInfo.id);
     addMovie(formData);
   };
@@ -115,9 +116,14 @@ export const Movie = () => {
                 {movieInfo.genres?.map((genre) => genre.name).join(", ")}
               </p>
             </div>
-            <Button variant="outline-dark" onClick={addMovieToList}>
-              Add to your list
-            </Button>
+            {movie.list[0] &&
+            movie.list[0].movies.map((i) => i.id).includes(movieInfo.id) ? (
+              <Button variant="outline-danger">Delete from your list</Button>
+            ) : (
+              <Button variant="outline-dark" onClick={addMovieToList}>
+                Add to your list
+              </Button>
+            )}
           </Card>
         </Col>
       </Row>
@@ -127,4 +133,4 @@ export const Movie = () => {
       </Row>
     </Container>
   );
-};
+});

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { jwtDecode } from "jwt-decode";
 
@@ -19,6 +19,8 @@ import {
 export const NavBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
+  const location = useLocation();
+
   const token = localStorage.getItem("token");
   const decodedToken = token ? jwtDecode(token) : null;
 
@@ -40,12 +42,14 @@ export const NavBar = observer(() => {
             <p style={{ color: "white", marginBottom: 0, marginRight: "20px" }}>
               Hello, {decodedToken.email.split("@")[0]}
             </p>
-            <Button
-              variant="outline-light"
-              onClick={() => navigate(LIST_PAGE_ROUTE)}
-            >
-              Your list
-            </Button>
+            {location.pathname.includes("list") ? null : (
+              <Button
+                variant="outline-light"
+                onClick={() => navigate(LIST_PAGE_ROUTE)}
+              >
+                Your list
+              </Button>
+            )}
             {decodedToken.role === "ADMIN" ? (
               <Button
                 variant="outline-light"

@@ -1,17 +1,36 @@
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 
 import { MOVIE_PAGE_ROUTE } from "../utils/route-consts";
+import { fetchUsers } from "../http/userAPI";
+import { fetchList } from "../http/listAPI";
 import { Context } from "..";
 
 import star from "../assets/ant-design_star-outlined.png";
 
 export const MovieItem = ({ movieItem }) => {
   const navigate = useNavigate();
+  const { user } = useContext(Context);
+  const location = useLocation();
+
+  const [list, setList] = useState(null);
+
+  const token = localStorage.getItem("token");
+  const decodedToken = token ? jwtDecode(token) : null;
+
+  useEffect(() => {
+    fetchUsers()
+      .then((data) => user.setUser(data))
+      .then((data) => {
+        const authUser = user.user.filter((i) => i.id === decodedToken.id);
+        fetchList(authUser[0].id).then((data) => setList(data));
+      });
+  }, []);
 
   return (
     <Col
@@ -19,12 +38,37 @@ export const MovieItem = ({ movieItem }) => {
       onClick={() => navigate(MOVIE_PAGE_ROUTE + "/" + movieItem.id)}
       style={{ marginBottom: 30 }}
     >
-      <Card style={{ width: 150, cursor: "pointer" }} border="light">
+      <Card
+        style={{ width: 220, cursor: "pointer", position: "relative" }}
+        border="light"
+      >
         <Image
           width={220}
           height={326}
           src={process.env.REACT_APP_API_URL + movieItem.img}
         />
+        {list &&
+        list[0].movies.map((i) => i.id).includes(movieItem.id) &
+          !location.pathname.includes("list") ? (
+          <div
+            style={{
+              position: "absolute",
+              background: "white",
+              color: "red",
+              top: 190,
+              left: 65,
+              width: 100,
+              height: 40,
+              borderRadius: 20,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <p style={{ marginBottom: 0 }}>In your list</p>
+          </div>
+        ) : null}
+
         <div className="d-flex flex-column justify-content-between align-items-start mt-2">
           <h6 className="mb-0">{movieItem.title}</h6>
           <p className="mb-0">
