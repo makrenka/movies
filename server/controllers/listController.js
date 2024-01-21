@@ -12,6 +12,21 @@ class ListController {
     }
   }
 
+  async deleteMovie(req, res, next) {
+    try {
+      const { listId, movieId } = req.body;
+      const movie = await ListMovie.destroy({
+        where: {
+          listId,
+          movieId,
+        },
+      });
+      return res.json(movie);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+
   async getMovies(req, res) {
     const { userId } = req.query;
     const moviesInList = await List.findAll({

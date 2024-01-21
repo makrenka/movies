@@ -13,7 +13,7 @@ import Spinner from "react-bootstrap/Spinner";
 
 import { fetchGenres, fetchOneMovie } from "../http/movieAPI";
 import { Context } from "..";
-import { addMovie, fetchList } from "../http/listAPI";
+import { addMovie, deleteMovie, fetchList } from "../http/listAPI";
 import { fetchUsers } from "../http/userAPI";
 
 import bigStar from "../assets/big-star.png";
@@ -21,6 +21,7 @@ import bigStar from "../assets/big-star.png";
 export const Movie = observer(() => {
   const [movieInfo, setMovieInfo] = useState({ info: [] });
   const [loading, setLoading] = useState(true);
+  const [list, setList] = useState(null);
 
   const { id } = useParams();
   const { movie } = useContext(Context);
@@ -47,15 +48,29 @@ export const Movie = observer(() => {
       .then((data) => {
         const authUser = user.user.filter((i) => i.id === decodedToken.id);
         const authUserId = authUser[0].id;
-        fetchList(authUserId).then((data) => movie.setList(data));
+        fetchList(authUserId).then((data) => setList(data));
       });
-  }, [user, movie.list[0]]);
+  }, [user]);
 
   const addMovieToList = () => {
     const formData = new FormData();
-    formData.append("listId", movie.list[0].id);
+    formData.append("listId", list[0].id);
     formData.append("movieId", movieInfo.id);
-    addMovie(formData);
+    addMovie(formData)
+      .then(() => setLoading(true))
+      .then(() => {
+        const authUser = user.user.filter((i) => i.id === decodedToken.id);
+        const authUserId = authUser[0].id;
+        fetchList(authUserId).then((data) => setList(data));
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const deleteMovieFromList = () => {
+    const formData = new FormData();
+    formData.append("listId", list[0].id);
+    formData.append("movieId", movieInfo.id);
+    deleteMovie(formData);
   };
 
   if (loading) {
@@ -116,9 +131,10 @@ export const Movie = observer(() => {
                 {movieInfo.genres?.map((genre) => genre.name).join(", ")}
               </p>
             </div>
-            {movie.list[0] &&
-            movie.list[0].movies.map((i) => i.id).includes(movieInfo.id) ? (
-              <Button variant="outline-danger">Delete from your list</Button>
+            {list && list[0].movies.map((i) => i.id).includes(movieInfo.id) ? (
+              <Button variant="outline-danger" onClick={deleteMovieFromList}>
+                Delete from your list
+              </Button>
             ) : (
               <Button variant="outline-dark" onClick={addMovieToList}>
                 Add to your list

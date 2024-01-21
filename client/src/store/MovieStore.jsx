@@ -8,7 +8,6 @@ export default class MovieStore {
     this._page = 1;
     this._totalCount = 0;
     this._limit = 9;
-    this._list = [];
     makeAutoObservable(this);
   }
 
@@ -31,9 +30,6 @@ export default class MovieStore {
   setLimit(limit) {
     this._limit = limit;
   }
-  setList(list) {
-    this._list = list;
-  }
 
   get genres() {
     return this._genres;
@@ -52,8 +48,5 @@ export default class MovieStore {
   }
   get limit() {
     return this._limit;
-  }
-  get list() {
-    return this._list;
   }
 }
