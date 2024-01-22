@@ -6,7 +6,7 @@ export const addMovie = async (movie) => {
 };
 
 export const deleteMovie = async (movie) => {
-  const { data } = await $host.post("api/list", movie);
+  const { data } = await $host.post("api/list/delete", movie);
   return data;
 };
 

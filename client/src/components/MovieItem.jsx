@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
+import Spinner from "react-bootstrap/Spinner";
 
 import { MOVIE_PAGE_ROUTE } from "../utils/route-consts";
 import { fetchUsers } from "../http/userAPI";
@@ -19,18 +20,37 @@ export const MovieItem = ({ movieItem }) => {
   const location = useLocation();
 
   const [list, setList] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("token");
   const decodedToken = token ? jwtDecode(token) : null;
 
   useEffect(() => {
-    fetchUsers()
-      .then((data) => user.setUser(data))
-      .then((data) => {
-        const authUser = user.user.filter((i) => i.id === decodedToken.id);
-        fetchList(authUser[0].id).then((data) => setList(data));
-      });
+    token &&
+      fetchUsers()
+        .then((data) => user.setUser(data))
+        .then((data) => {
+          const authUser = user.user.filter((i) => i.id === decodedToken.id);
+          fetchList(authUser[0].id)
+            .then((data) => setList(data))
+            .finally(() => setLoading(false));
+        });
   }, []);
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <Spinner animation="border" />
+      </div>
+    );
+  }
 
   return (
     <Col

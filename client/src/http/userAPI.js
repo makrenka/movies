@@ -21,11 +21,11 @@ export const login = async (email, password) => {
 };
 
 export const check = async () => {
-  const { data } = await $authHost.get("api/user/auth");
-  localStorage.setItem("token", data.token);
-  if (!data) {
+  const token = localStorage.getItem("token");
+  if (jwtDecode(token).exp < Date.now() / 1000) {
     localStorage.removeItem("token");
   }
+  const { data } = await $authHost.get("api/user/auth");
   return jwtDecode(data.token);
 };
 

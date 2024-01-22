@@ -70,7 +70,14 @@ export const Movie = observer(() => {
     const formData = new FormData();
     formData.append("listId", list[0].id);
     formData.append("movieId", movieInfo.id);
-    deleteMovie(formData);
+    deleteMovie(formData)
+      .then(() => setLoading(true))
+      .then(() => {
+        const authUser = user.user.filter((i) => i.id === decodedToken.id);
+        const authUserId = authUser[0].id;
+        fetchList(authUserId).then((data) => setList(data));
+      })
+      .finally(() => setLoading(false));
   };
 
   if (loading) {
