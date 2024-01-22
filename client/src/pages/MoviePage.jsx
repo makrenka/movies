@@ -17,11 +17,13 @@ import { addMovie, deleteMovie, fetchList } from "../http/listAPI";
 import { fetchUsers } from "../http/userAPI";
 
 import bigStar from "../assets/big-star.png";
+import { CreateRating } from "../components/modals/CreateRating";
 
 export const Movie = observer(() => {
   const [movieInfo, setMovieInfo] = useState({ info: [] });
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState(null);
+  const [ratingModalVisible, setRatingModalVisible] = useState(false);
 
   const { id } = useParams();
   const { movie } = useContext(Context);
@@ -34,7 +36,7 @@ export const Movie = observer(() => {
     fetchOneMovie(id)
       .then((data) => setMovieInfo(data))
       .finally(() => setLoading(false));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     fetchGenres()
@@ -50,7 +52,7 @@ export const Movie = observer(() => {
         const authUserId = authUser[0].id;
         fetchList(authUserId).then((data) => setList(data));
       });
-  }, [user]);
+  }, [user, decodedToken.id]);
 
   const addMovieToList = () => {
     const formData = new FormData();
@@ -116,7 +118,9 @@ export const Movie = observer(() => {
                 height: 240,
                 backgroundSize: "cover",
                 fontSize: 64,
+                cursor: "pointer",
               }}
+              onClick={() => setRatingModalVisible(true)}
             >
               {movieInfo.rating}
             </div>
@@ -154,6 +158,10 @@ export const Movie = observer(() => {
         <h3>Summary</h3>
         {movieInfo.summary}
       </Row>
+      <CreateRating
+        show={ratingModalVisible}
+        onHide={() => setRatingModalVisible(false)}
+      />
     </Container>
   );
 });

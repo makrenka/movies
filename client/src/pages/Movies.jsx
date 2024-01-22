@@ -20,12 +20,16 @@ export const Movies = observer(() => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUsers().then((data) => user.setUser(data));
-  }, []);
+    fetchUsers()
+      .then((data) => user.setUser(data))
+      .finally(() => setLoading(false));
+  }, [user]);
 
   useEffect(() => {
-    fetchGenres().then((data) => movie.setGenres(data));
-  }, []);
+    fetchGenres()
+      .then((data) => movie.setGenres(data))
+      .finally(() => setLoading(false));
+  }, [movie]);
 
   useEffect(() => {
     fetchMovies(movie.selectedGenre.id, movie.page, 9)
@@ -34,7 +38,7 @@ export const Movies = observer(() => {
         movie.setTotalCount(data.count);
       })
       .finally(() => setLoading(false));
-  }, [movie.selectedGenre.id, movie.page]);
+  }, [movie.selectedGenre.id, movie.page, movie]);
 
   if (loading) {
     return (

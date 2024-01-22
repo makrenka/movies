@@ -31,11 +31,10 @@ export const MovieItem = ({ movieItem }) => {
         .then((data) => user.setUser(data))
         .then((data) => {
           const authUser = user.user.filter((i) => i.id === decodedToken.id);
-          fetchList(authUser[0].id)
-            .then((data) => setList(data))
-            .finally(() => setLoading(false));
+          fetchList(authUser[0].id).then((data) => setList(data));
         });
-  }, []);
+    setLoading(false);
+  }, [token, user, decodedToken.id]);
 
   if (loading) {
     return (
