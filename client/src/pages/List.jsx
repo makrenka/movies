@@ -32,11 +32,11 @@ export const List = observer(() => {
         fetchList(authUser[0].id).then((data) => setList(data));
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [user, decodedToken.id]);
 
   useEffect(() => {
     fetchGenres().then((data) => movie.setGenres(data));
-  }, []);
+  }, [movie]);
 
   if (loading) {
     return (

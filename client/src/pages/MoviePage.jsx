@@ -18,12 +18,14 @@ import { fetchUsers } from "../http/userAPI";
 
 import bigStar from "../assets/big-star.png";
 import { CreateRating } from "../components/modals/CreateRating";
+import { fetchRating } from "../http/ratingAPI";
 
 export const Movie = observer(() => {
   const [movieInfo, setMovieInfo] = useState({ info: [] });
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState(null);
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
+  const [rating, setRating] = useState(null);
 
   const { id } = useParams();
   const { movie } = useContext(Context);
@@ -34,7 +36,10 @@ export const Movie = observer(() => {
 
   useEffect(() => {
     fetchOneMovie(id)
-      .then((data) => setMovieInfo(data))
+      .then((data) => {
+        setMovieInfo(data);
+        fetchRating(data.id).then((data) => setRating(data));
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -118,12 +123,16 @@ export const Movie = observer(() => {
                 height: 240,
                 backgroundSize: "cover",
                 fontSize: 64,
-                cursor: "pointer",
               }}
-              onClick={() => setRatingModalVisible(true)}
             >
               {movieInfo.rating}
             </div>
+            <Button
+              onClick={() => setRatingModalVisible(true)}
+              style={{ width: 250, marginTop: 15 }}
+            >
+              Your rating
+            </Button>
           </Row>
         </Col>
         <Col md={4}>
