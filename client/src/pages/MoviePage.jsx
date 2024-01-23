@@ -29,7 +29,6 @@ export const Movie = observer(() => {
 
   const { id } = useParams();
   const { movie } = useContext(Context);
-  const { user } = useContext(Context);
 
   const token = localStorage.getItem("token");
   const decodedToken = token ? jwtDecode(token) : null;
@@ -50,14 +49,8 @@ export const Movie = observer(() => {
   }, [movie]);
 
   useEffect(() => {
-    fetchUsers()
-      .then((data) => user.setUser(data))
-      .then((data) => {
-        const authUser = user.user.filter((i) => i.id === decodedToken.id);
-        const authUserId = authUser[0].id;
-        fetchList(authUserId).then((data) => setList(data));
-      });
-  }, [user, decodedToken.id]);
+    token && fetchList(decodedToken.id).then((data) => setList(data));
+  }, [token]);
 
   const addMovieToList = () => {
     const formData = new FormData();
@@ -65,11 +58,7 @@ export const Movie = observer(() => {
     formData.append("movieId", movieInfo.id);
     addMovie(formData)
       .then(() => setLoading(true))
-      .then(() => {
-        const authUser = user.user.filter((i) => i.id === decodedToken.id);
-        const authUserId = authUser[0].id;
-        fetchList(authUserId).then((data) => setList(data));
-      })
+      .then(() => fetchList(decodedToken.id).then((data) => setList(data)))
       .finally(() => setLoading(false));
   };
 
@@ -79,11 +68,7 @@ export const Movie = observer(() => {
     formData.append("movieId", movieInfo.id);
     deleteMovie(formData)
       .then(() => setLoading(true))
-      .then(() => {
-        const authUser = user.user.filter((i) => i.id === decodedToken.id);
-        const authUserId = authUser[0].id;
-        fetchList(authUserId).then((data) => setList(data));
-      })
+      .then(() => fetchList(decodedToken.id).then((data) => setList(data)))
       .finally(() => setLoading(false));
   };
 
@@ -151,15 +136,17 @@ export const Movie = observer(() => {
                 {movieInfo.genres?.map((genre) => genre.name).join(", ")}
               </p>
             </div>
-            {list && list[0].movies.map((i) => i.id).includes(movieInfo.id) ? (
-              <Button variant="outline-danger" onClick={deleteMovieFromList}>
-                Delete from your list
-              </Button>
-            ) : (
-              <Button variant="outline-dark" onClick={addMovieToList}>
-                Add to your list
-              </Button>
-            )}
+            {token ? (
+              list && list[0].movies.map((i) => i.id).includes(movieInfo.id) ? (
+                <Button variant="outline-danger" onClick={deleteMovieFromList}>
+                  Delete from your list
+                </Button>
+              ) : (
+                <Button variant="outline-dark" onClick={addMovieToList}>
+                  Add to your list
+                </Button>
+              )
+            ) : null}
           </Card>
         </Col>
       </Row>

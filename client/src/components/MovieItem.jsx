@@ -34,7 +34,7 @@ export const MovieItem = ({ movieItem }) => {
           fetchList(authUser[0].id).then((data) => setList(data));
         });
     setLoading(false);
-  }, [token, user, decodedToken.id]);
+  }, [token, user]);
 
   if (loading) {
     return (
