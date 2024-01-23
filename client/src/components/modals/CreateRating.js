@@ -4,8 +4,17 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-export const CreateRating = ({ show, onHide }) => {
+import { createRating } from "../../http/ratingAPI";
+
+export const CreateRating = ({ show, onHide, userId, movieId }) => {
   const [value, setValue] = useState(0);
+
+  const addRating = () => {
+    createRating({ rate: value, userId, movieId }).then(() => {
+      setValue(0);
+      onHide();
+    });
+  };
 
   return (
     <Modal show={show} onHide={onHide} centered>
@@ -53,7 +62,9 @@ export const CreateRating = ({ show, onHide }) => {
         <Button variant="secondary" onClick={onHide}>
           Close
         </Button>
-        <Button variant="primary">Save changes</Button>
+        <Button variant="primary" onClick={addRating}>
+          Save changes
+        </Button>
       </Modal.Footer>
     </Modal>
   );

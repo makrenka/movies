@@ -1,6 +1,6 @@
 import { $host } from ".";
 
-export const addRating = async (rating) => {
+export const createRating = async (rating) => {
   const { data } = await $host.post("api/rating", rating);
   return data;
 };

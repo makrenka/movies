@@ -40,7 +40,7 @@ export const NavBar = observer(() => {
         {user.isAuth ? (
           <Nav style={{ color: "white", alignItems: "center" }}>
             <p style={{ color: "white", marginBottom: 0, marginRight: "20px" }}>
-              Hello, {decodedToken.email.split("@")[0]}
+              Hello, {token && decodedToken.email.split("@")[0]}
             </p>
             {location.pathname.includes("list") ? null : (
               <Button

@@ -87,6 +87,8 @@ export const Movie = observer(() => {
     );
   }
 
+  const userRating = rating?.rows.filter((i) => i.userId === decodedToken.id);
+
   return (
     <Container className="mt-3">
       <Row>
@@ -112,12 +114,25 @@ export const Movie = observer(() => {
             >
               {movieInfo.rating}
             </div>
-            <Button
-              onClick={() => setRatingModalVisible(true)}
-              style={{ width: 250, marginTop: 15 }}
-            >
-              Your rating
-            </Button>
+            {userRating?.length ? (
+              <p
+                style={{
+                  textAlign: "center",
+                  marginBottom: 0,
+                  marginTop: 15,
+                  fontSize: 22,
+                }}
+              >
+                Your rating: {userRating[0].rate}
+              </p>
+            ) : (
+              <Button
+                onClick={() => setRatingModalVisible(true)}
+                style={{ width: 250, marginTop: 15 }}
+              >
+                Rate this movie
+              </Button>
+            )}
           </Row>
         </Col>
         <Col md={4}>
@@ -157,6 +172,8 @@ export const Movie = observer(() => {
       <CreateRating
         show={ratingModalVisible}
         onHide={() => setRatingModalVisible(false)}
+        userId={decodedToken.id}
+        movieId={movieInfo.id}
       />
     </Container>
   );
