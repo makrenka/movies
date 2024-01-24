@@ -4,16 +4,18 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-import { createRating } from "../../http/ratingAPI";
+import { createRating, fetchRating } from "../../http/ratingAPI";
 
-export const CreateRating = ({ show, onHide, userId, movieId }) => {
+export const CreateRating = ({ show, onHide, userId, movieId, setRating }) => {
   const [value, setValue] = useState(0);
 
   const addRating = () => {
-    createRating({ rate: value, userId, movieId }).then(() => {
-      setValue(0);
-      onHide();
-    });
+    createRating({ rate: value, userId, movieId })
+      .then(() => fetchRating(movieId).then((data) => setRating(data)))
+      .finally(() => {
+        setValue(0);
+        onHide();
+      });
   };
 
   return (

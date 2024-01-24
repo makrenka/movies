@@ -60,10 +60,6 @@ const Movie = sequelize.define("movies", {
   year: {
     type: DataTypes.STRING,
   },
-  rating: {
-    type: DataTypes.STRING,
-    defaultValue: 0,
-  },
   summary: {
     type: DataTypes.STRING(1000),
     allowNull: true,
@@ -89,7 +85,7 @@ const Rating = sequelize.define("rating", {
     autoIncrement: true,
   },
   rate: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
   },
 });
 

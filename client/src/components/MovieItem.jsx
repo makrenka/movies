@@ -27,13 +27,9 @@ export const MovieItem = ({ movieItem }) => {
 
   useEffect(() => {
     token &&
-      fetchUsers()
-        .then((data) => user.setUser(data))
-        .then((data) => {
-          const authUser = user.user.filter((i) => i.id === decodedToken.id);
-          fetchList(authUser[0].id).then((data) => setList(data));
-        });
-    setLoading(false);
+      fetchList(decodedToken.id)
+        .then((data) => setList(data))
+        .finally(() => setLoading(false));
   }, [token, user]);
 
   if (loading) {
@@ -66,7 +62,7 @@ export const MovieItem = ({ movieItem }) => {
           height={326}
           src={process.env.REACT_APP_API_URL + movieItem.img}
         />
-        {list &&
+        {token &&
         list[0].movies.map((i) => i.id).includes(movieItem.id) &
           !location.pathname.includes("list") ? (
           <div
